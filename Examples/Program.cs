@@ -31,12 +31,12 @@ namespace Examples
                 var timeDif = endDate - startDate;
 
                 var s = timeDif.Prettify()
-                    .HasPassed("tiden har passerat")
-                    .Hours("om nr timmer", "nr")
-                    .Days("om nrdays dagar", "nrdays", 1, 14)
-                    .Weeks("om nr veckor", "nr", 15, 352)
-                    .Special("om nr år","nr",opt => { return opt / 365; },PrettifyOnTimeStamp.Days,opt => { return opt.ToString(); })
-                    .NoMatch("no match")
+                    .HasPassed(text: "time has passed")
+                    .Hours(text: "in nr hours", placeholder: "nr")
+                    .Days(text: "in nrdays days", placeholder: "nrdays",low: 1,top: 14)
+                    .Weeks(text: "in nr weeks", placeholder: "nr", low: 15, top: 352)
+                    .Special(text: "in nr years", placeholder: "nr",opt => { return opt / 365; },PrettifyOnTimeStamp.Days,opt => { return opt.ToString(); })
+                    .NoMatch(text: "no match")
                     .Print();
 
                 Console.WriteLine(s);
