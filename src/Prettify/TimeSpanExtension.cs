@@ -91,50 +91,6 @@ namespace Prettify
         }
 
         /// <summary>
-        /// set rule for only hours left
-        /// </summary>
-        /// <param name="text">Text with place holder in it</param>
-        /// <param name="placeholder">unique text to replace</param>
-        /// <returns></returns>
-        public static IPrettify<TimeSpan> Hours(this IPrettify<TimeSpan> prettify, string text, string placeholder, int low = 0, int top = 0)
-        {
-            ValidatedLowAndTop(prettify, low, top);
-            ValidateTextAndPlaceHolder(prettify, text, placeholder);
-
-            prettify.AddCustom(new PrettifyActionHourLeft(text, placeholder, low, top));
-            return prettify;
-        }
-
-        /// <summary>
-        /// set rule for only days left
-        /// </summary>
-        /// <param name="text">Text with place holder in it</param>
-        /// <param name="placeholder">unique text to replace</param>
-        /// <returns></returns>
-        public static IPrettify<TimeSpan> Days(this IPrettify<TimeSpan> prettify, string text, string placeholder, int low = 0, int top = 0)
-        {
-            ValidatedLowAndTop(prettify, low, top);
-            ValidateTextAndPlaceHolder(prettify, text, placeholder);
-
-            prettify.AddCustom(new PrettifyActionDaysLeft(text, placeholder, low, top));
-            return prettify;
-        }
-
-        /// <summary>
-        /// set rule for only days left
-        /// </summary>
-        /// <param name="text">Text with place holder in it</param>
-        /// <param name="placeholder">unique text to replace</param>
-        /// <returns></returns>
-        public static IPrettify<TimeSpan> Weeks(this IPrettify<TimeSpan> prettify, string text, string placeholder, int low = 0, int top = 0)
-        {
-            ValidatedLowAndTop(prettify, low, top);
-            ValidateTextAndPlaceHolder(prettify, text, placeholder);
-
-            prettify = prettify.Special(text, placeholder, WeekFunc, PrettifyOnTimeStamp.Days, ToStringFunc, low, top);
-            return prettify;
-        }
-        /// <summary>
         /// set rule for only days left
         /// </summary>
         /// <param name="text">Text with place holder in it</param>
@@ -154,14 +110,21 @@ namespace Prettify
             return Math.Round(d / 7, MidpointRounding.AwayFromZero);
         }
 
-        public static IPrettify<TimeSpan> Special(this IPrettify<TimeSpan> prettify, string text, string placeholder, Func<double, double> func, PrettifyOnTimeStamp prettifyOnTotal, Func<double, string> ToString, int low = 0, int top = 0)
+        public static IPrettify<TimeSpan> Rule(this IPrettify<TimeSpan> prettify, string text, string placeholder, Func<double, double> func, Func<double, string> ToString, TimeSpan start, TimeSpan end, PrettifyOnTimeStamp prettifyOnTotal)
         {
-            ValidatedLowAndTop(prettify, low, top);
             ValidateTextAndPlaceHolder(prettify, text, placeholder);
 
-            prettify.AddCustom(new PrettifyActionSpecial(text, placeholder, low, top, func, prettifyOnTotal, ToString));
+            prettify.AddCustom(new PrettifyActionRule(text, placeholder, start, end, func, ToString,prettifyOnTotal));
             return prettify;
         }
+        public static IPrettify<TimeSpan> Rule(this IPrettify<TimeSpan> prettify, string text, string placeholder, Func<double, string> ToString, TimeSpan start, TimeSpan end, PrettifyOnTimeStamp prettifyOnTotal)
+        {
+            ValidateTextAndPlaceHolder(prettify, text, placeholder);
+
+            prettify.AddCustom(new PrettifyActionRule(text, placeholder, start, end, ToString, prettifyOnTotal));
+            return prettify;
+        }
+
 
         #region Validation
         private static void ValidatedLowAndTop(IPrettify<TimeSpan> prettify, int low, int top)
@@ -178,6 +141,7 @@ namespace Prettify
                 }
             }
         }
+
         private static void ValidateTextAndPlaceHolder(IPrettify<TimeSpan> prettify, string text, string placeholder)
         {
             if (!prettify.SilentFail)
