@@ -36,7 +36,7 @@ namespace Examples
                     .Rule("Hours nr left", "nr", opt => { return opt.ToString(); }, new TimeSpan(0, 0, 0, 0, 0), new TimeSpan(2, 0, 0, 0, 0), PrettifyOnTimeStamp.Hours)
                     .Rule("Days nr left", "nr", opt => { return opt.ToString(); }, new TimeSpan(2, 0, 0, 0, 0), new TimeSpan(60, 0, 0, 0, 0), PrettifyOnTimeStamp.Days)
                     .Rule("Weeks nr left", "nr", opt => { return Math.Round(opt / 7, MidpointRounding.AwayFromZero); }, opt => { return opt.ToString(); }, new TimeSpan(60, 0, 0, 0, 0), new TimeSpan(365, 0, 0, 0, 0), PrettifyOnTimeStamp.Days)
-                    .Rule("Years nr left", "nr", opt => { return Math.Round(opt / 7, MidpointRounding.AwayFromZero); }, opt => { return opt.ToString(); }, new TimeSpan(365, 0, 0, 0, 0), new TimeSpan(1500, 0, 0, 0, 0), PrettifyOnTimeStamp.Days)
+                    .Rule("Years nr left", "nr", opt => { return Math.Round(opt / 365, MidpointRounding.AwayFromZero); }, opt => { return opt.ToString(); }, new TimeSpan(365, 0, 0, 0, 0), new TimeSpan(1500, 0, 0, 0, 0), PrettifyOnTimeStamp.Days)
                     .Print();
 
                 Console.WriteLine(s);
